@@ -5,7 +5,7 @@ import IndexScreen from "./src/screens/IndexScreen";
 import { BlogProvider } from "./src/context/BlogContext";
 
 
-const navigation = createStackNavigator(
+const navigator = createStackNavigator(
   {
     Index: IndexScreen,
   },
