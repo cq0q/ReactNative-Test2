@@ -21,8 +21,9 @@ const navigator = createStackNavigator(
 const App = createAppContainer(navigator);
 
 export default () => {
-  return
+  return (
   <BlogProvider>
     <App />
-  </BlogProvider>;
+  </BlogProvider>
+  );
 };
