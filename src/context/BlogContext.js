@@ -4,7 +4,7 @@ import uuid from 'react-native-uuid';
 
 const blogReducer = (state, action) => {
      switch (action.type) {
-          case 'delete_blogPost':
+          case 'delete_blogpost':
                return state.filter(blogPost => blogPost.id !== action.payload);
           case 'add_blogpost':
                return (
