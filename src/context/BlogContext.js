@@ -23,23 +23,23 @@ const blogReducer = (state, action) => {
           case 'delete_blogpost':
                return state.filter(blogPost => blogPost.id !== action.payload);
 
-          case 'add_blogpost':
-               return (
-                    [
-                         ...state,
-                         {
-                              id: uuid.v4(),
-                              //title: `Blog Post #${state.length + 1}`
-                              title: action.payload.title,
-                              action: action.payload.content
-                         }
-                    ]
-               // What i did here is that: i took all the existing blog posts and added them here (in action as: dot dot dot state) to this array, 
-               //so this code itself means create a new array, and inside that new array take all the current blog posts we have and add them in to the new array (it's like some sort of loop).
-               // and that kind of loop is going to get executed when the customer presses on the add Post button (which i created in indexScreen file)
-               );
-          default:
-               return state;
+          //case 'add_blogpost':
+          //     return (
+          //          [
+          //               ...state,
+          //               {
+          //                    id: uuid.v4(),
+          //                    //title: `Blog Post #${state.length + 1}`
+          //                    title: action.payload.title,
+          //                    action: action.payload.content
+          //               }
+          //          ]
+          //     // What i did here is that: i took all the existing blog posts and added them here (in action as: dot dot dot state) to this array, 
+          //     //so this code itself means create a new array, and inside that new array take all the current blog posts we have and add them in to the new array (it's like some sort of loop).
+          //     // and that kind of loop is going to get executed when the customer presses on the add Post button (which i created in indexScreen file)
+          //     );
+          //default:
+          //     return state;
      }
 };
 
@@ -54,8 +54,9 @@ const getBlogPosts = dispatch => {
 };
 
 const addBlogPost = (dispatch) => {
-     return (title, content, callback) => {
-          dispatch ({ type: 'add_blogpost', payload: {title: title, content: content} });
+     return async (title, content, callback) => {
+          await jsonServer.post('/blogposts', { title: title, content: content });
+          //dispatch ({ type: 'add_blogpost', payload: {title: title, content: content} });
           if (callback) {
                callback();
           };
@@ -63,13 +64,17 @@ const addBlogPost = (dispatch) => {
 };
 
 const deleteBlogPost = (dispatch) => {
-     return id => {
+     return async id => {
+          await jsonServer.delete(`/blogposts/${id}`);
+
           dispatch ({ type: 'delete_blogpost', payload: id });
      };
 };
 
 const editBlogPost = (dispatch) => {
-     return (id, title, content, callback) => {
+     return async (id, title, content, callback) => {
+          await jsonServer.put(`/blogposts/${id}`, { title: title, content: content });
+
           dispatch ({
                type: 'edit_blogpost',
                payload: { id: id, title: title, content: content}
