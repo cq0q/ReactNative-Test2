@@ -1,9 +1,13 @@
 import createDataContext from "./createDataContext";
 import uuid from 'react-native-uuid';
+import jsonServer from "../api/jsonServer";
 
 
 const blogReducer = (state, action) => {
      switch (action.type) {
+          case 'get_blogposts':
+               return action.payload;
+
           case 'edit_blogpost':
                return state.map (blogPost => {
                     return blogPost.id === action.payload.id ? action.payload : blogPost;
@@ -15,8 +19,10 @@ const blogReducer = (state, action) => {
              //  };
 
                });
+
           case 'delete_blogpost':
                return state.filter(blogPost => blogPost.id !== action.payload);
+
           case 'add_blogpost':
                return (
                     [
@@ -35,6 +41,16 @@ const blogReducer = (state, action) => {
           default:
                return state;
      }
+};
+
+const getBlogPosts = dispatch => {
+     return async () => {
+          const response = await jsonServer.get('/blogposts');
+          // response.data === [ {}, {}, {} ]
+          // response.data property is where our list of blog posts is going to be.
+          // so Json or response.data will be an array of objects (like how i wrote in the first comment), where every object is our blog post .
+          dispatch ({ type: 'get_blogposts', payload: response.data });
+     };
 };
 
 const addBlogPost = (dispatch) => {
@@ -70,6 +86,6 @@ const editBlogPost = (dispatch) => {
 
 export const { Context, Provider } = createDataContext (
      blogReducer,
-     { addBlogPost, deleteBlogPost, editBlogPost },
-     [{ title: 'TEST POST', content: 'TEST CONTENT', id: 1}]    // This is the initial default state value which is gonna be an empty array
+     { addBlogPost, deleteBlogPost, editBlogPost, getBlogPosts },
+     []    // This is the initial default state value which is gonna be an empty array (which basically means: what shows on the screen when you open the app)
 );
