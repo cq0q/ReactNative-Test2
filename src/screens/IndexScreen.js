@@ -11,6 +11,7 @@ const IndexScreen = ({ navigation }) => {
     useEffect (() => {
       getBlogPosts();
     }, []);
+    
     return (
         <View>
             <FlatList
