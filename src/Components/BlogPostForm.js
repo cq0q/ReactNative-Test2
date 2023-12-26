@@ -24,7 +24,7 @@ BlogPostForm.defaultProps = {
     initialValues: {
         title: '',
         content: ''
-    }
+    };
 };
 
 
